@@ -1,0 +1,57 @@
+version: 2
+
+models:
+
+  - name: int_daily_returns
+    description: >
+      Calculates daily percentage returns for each stock ticker
+      using previous trading day close prices.
+
+    columns:
+
+      - name: ticker
+        description: Stock ticker symbol
+        tests:
+          - not_null
+
+      - name: price_date
+        description: Trading date
+        tests:
+          - not_null
+
+      - name: daily_return_percent
+        description: Daily percentage return of stock price
+
+      - name: trading_day_result
+        description: Indicates whether stock gained or lost value
+
+
+  - name: int_moving_averages
+    description: >
+      Calculates rolling moving averages for stock prices.
+
+    columns:
+
+      - name: ticker
+        tests:
+          - not_null
+
+      - name: moving_avg_7_day
+        description: 7-day rolling moving average
+
+      - name: moving_avg_30_day
+        description: 30-day rolling moving average
+
+
+  - name: int_volatility
+    description: >
+      Calculates rolling 30-day stock volatility using standard deviation.
+
+    columns:
+
+      - name: ticker
+        tests:
+          - not_null
+
+      - name: rolling_30_day_volatility
+        description: Rolling 30-day volatility metric

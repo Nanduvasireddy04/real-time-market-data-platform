@@ -1,0 +1,37 @@
+version: 2
+
+models:
+
+  - name: mart_stock_performance
+    description: >
+      Final analytics mart containing latest stock performance metrics,
+      moving averages, volatility, and trend indicators.
+
+    columns:
+
+      - name: ticker
+        tests:
+          - unique
+          - not_null
+
+      - name: trend_signal
+        description: Bullish or bearish stock trend signal
+
+
+  - name: mart_market_summary
+    description: >
+      Executive market summary KPI mart.
+
+    columns:
+
+      - name: total_stocks
+        description: Number of tracked stocks
+
+      - name: average_daily_return
+        description: Average market daily return
+
+      - name: bullish_stocks
+        description: Count of bullish stocks
+
+      - name: bearish_stocks
+        description: Count of bearish stocks
