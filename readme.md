@@ -1,6 +1,6 @@
 # Real-Time Market Data Engineering & Analytics Platform
 
-A professional end-to-end Data Engineering and Analytics project that ingests historical stock market data, stores it in a warehouse, transforms it using dbt, and prepares analytics-ready datasets for Power BI dashboards.
+A professional end-to-end Data Engineering and Analytics project that ingests historical stock market data, stores it in a cloud warehouse, transforms it using dbt, and visualizes analytics-ready datasets in Tableau executive dashboards.
 
 ---
 
@@ -11,7 +11,8 @@ The goal of this project is to simulate a real-world financial data engineering 
 - Python
 - PostgreSQL
 - dbt
-- Power BI
+- Supabase (Cloud PostgreSQL)
+- Tableau
 - Financial Market Data APIs
 
 This project demonstrates:
@@ -22,7 +23,8 @@ This project demonstrates:
 - dbt transformations
 - Data quality testing
 - Financial analytics modeling
-- Dashboard-ready analytics marts
+- Cloud-hosted analytics marts
+- Executive dashboard engineering
 
 ---
 
@@ -43,7 +45,9 @@ dbt Intermediate Transformations
         ↓
 Analytics Marts
         ↓
-Power BI Dashboards
+Supabase Cloud PostgreSQL
+        ↓
+Tableau Executive Dashboards
 ```
 
 ---
@@ -56,8 +60,9 @@ Power BI Dashboards
 | Data Source        | yfinance API               |
 | Data Storage       | CSV Data Lake              |
 | Warehouse          | PostgreSQL                 |
+| Cloud Warehouse    | Supabase (PostgreSQL)      |
 | Transformation     | dbt Core                   |
-| Analytics          | Power BI                   |
+| Visualization      | Tableau                    |
 | Environment        | Python Virtual Environment |
 | ORM / DB Connector | SQLAlchemy                 |
 | Data Processing    | pandas                     |
@@ -329,21 +334,7 @@ dbt test
 
 ---
 
-## Current Architecture
-
-```txt
-yfinance API
-        ↓
-Python ingestion pipeline
-        ↓
-CSV raw data lake
-        ↓
-PostgreSQL raw warehouse
-        ↓
-dbt staging layer
-```
-
-### Current dbt Models
+### Current dbt Models (After Day 3)
 
 | Model                | Purpose             |
 | -------------------- | ------------------- |
@@ -352,101 +343,11 @@ dbt staging layer
 
 ---
 
-## Real-World Engineering Concepts
-
-### Data Lake Layer
-
-The raw CSV storage layer acts as a lightweight local data lake, mimicking enterprise architectures where raw source data is stored before transformations are applied.
-
-### ELT Architecture
-
-```txt
-Extract → Load → Transform
-```
-
-Data is extracted from APIs, loaded into PostgreSQL, then transformed using dbt — mirroring cloud warehouse workflows used in Snowflake, Databricks, BigQuery, and Redshift.
-
-### dbt Transformation Layer
-
-dbt enables modular SQL transformations with reusable models, dependency management, a built-in testing framework, documentation generation, and data lineage visualization.
-
-### Analytics Engineering
-
-The project separates raw data, clean staging models, intermediate business logic, and final analytics marts — improving maintainability, scalability, reusability, and dashboard performance.
-
----
-
-## Potential Enterprise Extensions
-
-### Streaming Architecture
-
-```txt
-Kafka → Spark Streaming → Warehouse
-```
-
-### Cloud Architecture
-
-```txt
-S3 → Snowflake → dbt Cloud → Power BI
-```
-
-### Databricks Integration
-
-- Bronze/Silver/Gold architecture
-- Delta Lake tables
-- PySpark transformations
-- Large-scale financial analytics
-
-### Airflow Orchestration
-
-- Scheduled ingestion jobs
-- Automated transformations
-- Pipeline monitoring
-- Failure alerting
-
----
-
-## Key Learning Outcomes by Phase
-
-| Phase                | Skills Learned                    |
-| -------------------- | --------------------------------- |
-| Python ingestion     | API ingestion, pandas, ETL logic  |
-| Raw data storage     | Data lake concepts                |
-| PostgreSQL warehouse | SQL warehousing, schema design    |
-| SQLAlchemy           | Database connectivity             |
-| dbt setup            | Analytics engineering             |
-| dbt testing          | Data quality validation           |
-| Staging models       | Data cleaning and standardization |
-| Future marts         | Business analytics modeling       |
-| Dashboard prep       | BI engineering                    |
-
----
-
 ## Day 4 — Intermediate Analytics Engineering Layer
 
 ### Objective
 
 Build intermediate analytical transformation models using dbt to create reusable financial analytics datasets. This phase transforms the project from a raw ingestion pipeline into a real analytics engineering platform.
-
-### Updated Architecture
-
-```txt
-Market APIs
-        ↓
-Python Ingestion Pipelines
-        ↓
-CSV Raw Data Lake
-        ↓
-PostgreSQL Warehouse
-        ↓
-dbt Staging Models
-        ↓
-Intermediate Analytics Models
-        ↓
-Analytics Marts
-        ↓
-Power BI Dashboards
-```
 
 ### Intermediate Models Folder Structure
 
@@ -487,11 +388,11 @@ This introduces analytical SQL logic commonly used in quantitative analytics, tr
 
 **Trading Day Classification**
 
-| Condition                          | Classification |
-| ---------------------------------- | -------------- |
-| Current close > Previous close     | GAIN           |
-| Current close < Previous close     | LOSS           |
-| Equal prices                       | NO_CHANGE      |
+| Condition                       | Classification |
+| ------------------------------- | -------------- |
+| Current close > Previous close  | GAIN           |
+| Current close < Previous close  | LOSS           |
+| Equal prices                    | NO_CHANGE      |
 
 **Validation Query**
 
@@ -528,10 +429,10 @@ AVG(close_price) OVER (... ROWS BETWEEN 29 PRECEDING AND CURRENT ROW)
 
 **Output Columns**
 
-| Column           | Description              |
-| ---------------- | ------------------------ |
-| moving_avg_7_day | Short-term trend average |
-| moving_avg_30_day| Long-term trend average  |
+| Column            | Description              |
+| ----------------- | ------------------------ |
+| moving_avg_7_day  | Short-term trend average |
+| moving_avg_30_day | Long-term trend average  |
 
 **Validation Query**
 
@@ -575,11 +476,11 @@ LIMIT 20;
 
 ### Intermediate Layer Summary
 
-| Model               | Purpose                    |
-| ------------------- | -------------------------- |
-| int_daily_returns   | Daily percentage returns   |
-| int_moving_averages | Rolling trend averages     |
-| int_volatility      | Risk and volatility metrics|
+| Model               | Purpose                     |
+| ------------------- | --------------------------- |
+| int_daily_returns   | Daily percentage returns    |
+| int_moving_averages | Rolling trend averages      |
+| int_volatility      | Risk and volatility metrics |
 
 This phase introduces real analytical engineering concepts including window functions, rolling calculations, statistical analytics, financial metrics, and quantitative transformations — elevating the project significantly beyond beginner ETL work.
 
@@ -636,15 +537,15 @@ Creates executive-level market KPIs summarizing the entire analytics platform �
 
 **Executive KPIs Generated**
 
-| KPI                      | Description               |
-| ------------------------ | ------------------------- |
-| total_stocks             | Total tracked stocks      |
-| average_daily_return     | Average market return     |
-| average_market_volatility| Market-wide risk          |
-| best_daily_return        | Best performing stock     |
-| worst_daily_return       | Worst performing stock    |
-| bullish_stocks           | Number of bullish stocks  |
-| bearish_stocks           | Number of bearish stocks  |
+| KPI                       | Description               |
+| ------------------------- | ------------------------- |
+| total_stocks              | Total tracked stocks      |
+| average_daily_return      | Average market return     |
+| average_market_volatility | Market-wide risk          |
+| best_daily_return         | Best performing stock     |
+| worst_daily_return        | Worst performing stock    |
+| bullish_stocks            | Number of bullish stocks  |
+| bearish_stocks            | Number of bearish stocks  |
 
 **Validation Query**
 
@@ -678,26 +579,195 @@ The generated documentation site includes model lineage graphs, dependencies, te
 
 ---
 
-## Complete Architecture
+## Day 6 — Tableau Dashboard Engineering & Cloud Analytics Visualization
+
+### Objective
+
+Build a professional executive-level financial analytics dashboard using Tableau connected directly to the cloud-hosted PostgreSQL analytics warehouse in Supabase.
+
+This phase completes the project as a full end-to-end Analytics Engineering and BI platform by enabling live analytical reporting, KPI visualization, financial performance monitoring, and interactive dashboard exploration.
+
+---
+
+### Supabase Cloud Migration
+
+The local PostgreSQL analytics warehouse was migrated to **Supabase** (cloud-hosted PostgreSQL), enabling live cloud connectivity for Tableau dashboards.
+
+---
+
+### Tableau Connection Setup
+
+Connected Tableau directly to the Supabase PostgreSQL cloud warehouse using the PostgreSQL connector.
+
+**Connection Configuration**
+
+| Setting   | Value                               |
+| --------- | ----------------------------------- |
+| Server    | Supabase PostgreSQL Pooler Host     |
+| Port      | 6543                                |
+| Database  | postgres                            |
+| SSL Mode  | Require                             |
+| Connector | PostgreSQL                          |
+
+**Connected Analytics Tables**
+
+| Table                             | Purpose                                    |
+| --------------------------------- | ------------------------------------------ |
+| analytics.mart_stock_performance  | Stock-level analytics and trend metrics    |
+| analytics.mart_market_summary     | Executive-level market KPI summaries       |
+
+The Tableau integration enables direct live querying of cloud-hosted analytics marts without manual CSV exports.
+
+---
+
+### Executive Dashboard Engineering
+
+**Dashboard Created:** Vector Market Analytics Dashboard
+
+**Dashboard Objective:** Provide executive-level visibility into financial market performance, stock trends, volatility analytics, and market-wide KPIs using interactive business intelligence visualizations.
+
+---
+
+### Dashboard Components
+
+#### Executive KPI Cards
+
+Built interactive KPI cards displaying:
+
+| KPI                    | Description                    |
+| ---------------------- | ------------------------------ |
+| Average Daily Return   | Average market performance     |
+| Average Market Volatility | Overall market risk indicator |
+| Highest Stock Price    | Top-performing stock price     |
+| Lowest Stock Price     | Lowest tracked stock price     |
+
+These KPIs simulate executive financial reporting dashboards commonly used in trading analytics platforms, investment monitoring systems, and financial intelligence applications.
+
+---
+
+#### Stock Price Analytics
+
+Created bar chart visualizations showing:
+
+- Close price comparison by ticker
+- Relative stock performance analysis
+- Comparative market pricing trends
+
+---
+
+#### Daily Return Analytics
+
+Built return analysis dashboards visualizing:
+
+- Daily return percentages
+- Positive vs negative market movements
+- Comparative return performance by stock ticker
+
+---
+
+#### Rolling Volatility Analytics
+
+Implemented rolling volatility dashboards using 30-day volatility metrics generated in dbt transformation models. This visualization highlights:
+
+- Market instability
+- Risk concentration
+- Volatility distribution
+- Quantitative market risk behavior
+
+---
+
+#### Trend Signal Distribution
+
+Created trend analysis dashboards using bullish and bearish trend classifications generated through moving average crossover logic.
+
+```txt
+Bullish → MA_7 > MA_30
+Bearish → MA_7 < MA_30
+```
+
+This simulates common quantitative trading and technical analysis workflows used in financial analytics systems.
+
+---
+
+#### Detailed Analytics Reporting Table
+
+Built a detailed analytical reporting table displaying:
+
+| Column                    | Description                  |
+| ------------------------- | ---------------------------- |
+| ticker                    | Stock symbol                 |
+| close_price               | Latest close price           |
+| daily_return_percent      | Daily percentage return      |
+| rolling_30_day_volatility | Volatility risk metric       |
+| trend_signal              | Bullish/Bearish classification |
+
+The table supports interactive filtering, dashboard exploration, and ticker-level analytical reporting.
+
+---
+
+### Interactive Dashboard Features
+
+**Global Ticker Filtering**
+
+Implemented dashboard-wide filtering enabling users to dynamically filter all visualizations by stock ticker.
+
+**Cross-Visualization Interactivity**
+
+Configured charts to act as interactive filters — selecting a stock filters all related dashboard metrics and visuals dynamically update across all analytical views.
+
+**Professional Dashboard Formatting**
+
+Applied professional BI dashboard design practices including:
+
+- Executive KPI layouts
+- Financial-style color logic
+- Minimalist visualization design
+- Responsive dashboard structure
+- Consistent typography and spacing
+- Clean analytical reporting layout
+
+---
+
+### Business Intelligence Engineering Concepts
+
+**Live Cloud Analytics**
+
+The Tableau dashboard queries live analytics marts hosted in Supabase PostgreSQL, simulating real-world BI systems where dashboards connect directly to centralized warehouse layers.
+
+**Analytics Mart Architecture**
+
+The dashboard consumes business-facing dbt marts rather than raw warehouse tables, demonstrating proper analytics engineering layering and semantic modeling principles.
+
+**Financial Analytics Reporting**
+
+The dashboard introduces quantitative analytics concepts including return analytics, rolling volatility calculations, moving average trend analysis, market risk indicators, and executive KPI reporting.
+
+**Interactive BI Workflows**
+
+The dashboard supports dynamic user-driven exploration, enabling real-time analytical slicing, filtering, and comparative financial analysis.
+
+---
+
+## Complete Final Architecture
 
 ```txt
 Market Data APIs
         ↓
-Python Ingestion Pipelines
+Python ETL Pipelines
         ↓
 CSV Raw Data Lake
         ↓
-PostgreSQL Raw Warehouse
+PostgreSQL Warehouse
         ↓
 dbt Staging Models
         ↓
-Intermediate Analytics Models
+Intermediate Financial Analytics Models
         ↓
 Analytics Marts
         ↓
-dbt Testing & Documentation
+Supabase Cloud PostgreSQL
         ↓
-Power BI Dashboards
+Tableau Executive Dashboards
 ```
 
 ---
@@ -724,53 +794,29 @@ dbt enables modular SQL transformations with reusable models, dependency managem
 
 The project separates raw data, clean staging models, intermediate business logic, and final analytics marts — improving maintainability, scalability, reusability, and dashboard performance.
 
----
+### Cloud-Native Analytics Platform
 
-## Potential Enterprise Extensions
-
-### Streaming Architecture
-
-```txt
-Kafka → Spark Streaming → Warehouse
-```
-
-### Cloud Architecture
-
-```txt
-S3 → Snowflake → dbt Cloud → Power BI
-```
-
-### Databricks Integration
-
-- Bronze/Silver/Gold architecture
-- Delta Lake tables
-- PySpark transformations
-- Large-scale financial analytics
-
-### Airflow Orchestration
-
-- Scheduled ingestion jobs
-- Automated transformations
-- Pipeline monitoring
-- Failure alerting
+The project simulates modern cloud analytics systems by integrating cloud-hosted PostgreSQL warehousing (Supabase) with live Tableau BI dashboards.
 
 ---
 
 ## Key Learning Outcomes by Phase
 
-| Phase                      | Skills Learned                              |
-| -------------------------- | ------------------------------------------- |
-| Python ingestion           | API ingestion, pandas, ETL logic            |
-| Raw data storage           | Data lake concepts                          |
-| PostgreSQL warehouse       | SQL warehousing, schema design              |
-| SQLAlchemy                 | Database connectivity                       |
-| dbt setup                  | Analytics engineering                       |
-| dbt testing                | Data quality validation                     |
-| Staging models             | Data cleaning and standardization           |
-| Intermediate models        | Window functions, financial metrics         |
-| Analytics marts            | Business analytics modeling                 |
-| dbt docs & testing         | Documentation, lineage, data quality        |
-| Dashboard prep             | BI engineering                              |
+| Phase                      | Skills Learned                                      |
+| -------------------------- | --------------------------------------------------- |
+| Python ingestion           | API ingestion, pandas, ETL logic                    |
+| Raw data storage           | Data lake concepts                                  |
+| PostgreSQL warehouse       | SQL warehousing, schema design                      |
+| SQLAlchemy                 | Database connectivity                               |
+| dbt setup                  | Analytics engineering                               |
+| dbt testing                | Data quality validation                             |
+| Staging models             | Data cleaning and standardization                   |
+| Intermediate models        | Window functions, financial metrics                 |
+| Analytics marts            | Business analytics modeling                         |
+| dbt docs & testing         | Documentation, lineage, data quality                |
+| Supabase cloud migration   | Cloud infrastructure, cloud database integration    |
+| Tableau BI engineering     | Dashboarding, KPI reporting, BI visualization       |
+| Interactive analytics      | Cross-filtering, dashboard exploration              |
 
 ---
 
@@ -787,10 +833,10 @@ S3 → Snowflake → dbt Cloud → Power BI
 - Analytics marts
 - dbt testing
 - dbt documentation
-
-**In Progress 🟡**
-
-- Power BI dashboards
+- Supabase cloud migration
+- Tableau executive dashboards
+- Interactive BI reporting
+- Financial KPI analytics
 
 **Planned 🔵**
 
@@ -802,14 +848,46 @@ S3 → Snowflake → dbt Cloud → Power BI
 
 ---
 
-## Upcoming Phase — Power BI Dashboard Engineering
+## Potential Enterprise Extensions
 
-- Executive KPI dashboard
-- Daily returns dashboard
-- Moving average trend dashboard
-- Volatility analytics dashboard
-- Interactive stock comparison dashboards
-- Financial analytics visualizations
+### Streaming Architecture
+
+```txt
+Kafka → Spark Streaming → Warehouse
+```
+
+### Cloud Data Lake
+
+```txt
+AWS S3 → Warehouse → dbt → Tableau
+```
+
+### Cloud Analytics Architecture
+
+```txt
+S3 → Snowflake → dbt Cloud → Tableau
+```
+
+### Databricks Integration
+
+- Bronze/Silver/Gold architecture
+- Delta Lake tables
+- PySpark transformations
+- Large-scale financial analytics
+
+### Airflow Orchestration
+
+- Scheduled ingestion jobs
+- Automated transformations
+- Pipeline monitoring
+- Failure alerting
+
+### Machine Learning Extensions
+
+- Financial forecasting models
+- Stock trend prediction
+- Volatility forecasting
+- Risk scoring analytics
 
 ---
 
@@ -829,12 +907,25 @@ S3 → Snowflake → dbt Cloud → Power BI
 
 ## Why This Project Is Resume-Worthy
 
-This project closely simulates how modern financial analytics platforms are built in production environments. It demonstrates practical industry skills including data ingestion engineering, warehouse architecture, ELT pipeline design, analytics engineering with dbt, financial data modeling, data validation and testing, and dashboard preparation for BI tools.
+This project simulates a production-style financial analytics engineering platform using modern cloud-native technologies and industry-standard ELT architecture.
 
-It is especially valuable for roles in **Data Engineering**, **Analytics Engineering**, **Financial Data Engineering**, **Quantitative Analytics**, and **Business Intelligence Engineering**.
+It demonstrates practical experience in:
+
+- Data ingestion engineering
+- PostgreSQL warehousing
+- dbt analytics engineering
+- Financial analytics modeling
+- Cloud database infrastructure (Supabase)
+- Executive dashboard engineering (Tableau)
+- Interactive BI reporting
+- End-to-end analytical platform design
+
+The project is highly relevant for roles in **Data Engineering**, **Analytics Engineering**, **BI Engineering**, **Financial Data Engineering**, **Quantitative Analytics**, and **Data Platform Engineering**.
 
 ---
 
 ## Conclusion
 
-This project establishes a strong foundation in modern Data Engineering and Analytics by simulating a real-world financial market data platform. The architecture follows industry-standard ELT practices and demonstrates how raw market data can be transformed into analytics-ready datasets using scalable engineering principles — creating a portfolio piece that is both production-realistic and interview-ready.
+This project establishes a complete end-to-end financial analytics engineering platform capable of ingesting, transforming, modeling, and visualizing market data using modern analytics engineering practices.
+
+By integrating Python ETL pipelines, PostgreSQL warehousing, dbt transformation layers, Supabase cloud infrastructure, and Tableau executive dashboards, the platform demonstrates how production-style cloud analytics systems are designed and implemented in real-world financial analytics environments — creating a portfolio piece that is both production-realistic and interview-ready.
